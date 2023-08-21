@@ -1,0 +1,24 @@
+image:
+  registry: docker.io
+  repository: homeassistant/home-assistant
+  tag: "2023.8.2"
+
+ingress:
+  hostname: home-assistant.example.com
+  annotations: {}
+
+
+config:
+  trustedIps: 10.43.0.0/16
+  postgresql:
+    hostname: "not_set"
+    username: "not_set"
+    password: "not_set"
+    database: "home-assistant"
+  mosquitto:
+    hostname: "not_set"
+    username: "not_set"
+    password: "not_set"
+  google:
+    projectId: "not_set"
+    serviceAccount: "not_set"

@@ -1,0 +1,24 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+# Database backend
+recorder:
+  db_url: !secret db_url
+
+# Ingress forwarding ettings
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - !secret trusted_ips
+
+# Google assistant configuration
+google_assistant:
+  project_id: !secret google_project_id
+  service_account: !include serviceAccount.json
+  report_state: true
+  expose_by_default: false
+  entity_config: {}
