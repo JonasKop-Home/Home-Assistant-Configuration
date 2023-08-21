@@ -1,0 +1,68 @@
+name: Package and push helm chart
+
+on: push
+
+jobs:
+  setup:
+    runs-on: ubuntu-22.04
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set version
+        id: set_version
+        uses: JonasKop-Home/Github-Actions/set-version@main
+
+  # package:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v3
+      
+  #     - name: Login to Google Cloud
+  #       uses: 'google-github-actions/auth@v1'
+  #       with:
+  #         credentials_json: '${{ inputs.gcp_credentials }}'
+
+  #     - name: Copy configuration files
+  #       run: |
+  #         mkdir -p helm/home-assistant/configuration
+  #         cp configuration.yaml \
+  #           helm/home-assistant/configuration
+
+  #     - name: Login to helm registry
+  #       run: helm login
+
+  #     - name: Package helm chart home-assistant
+  #       run: |
+  #         set -e
+  #         helm dependency build helm/home-assistant
+  #         helm package \
+  #           --app-version ${{ steps.set_version.outputs.version }} \
+  #           --version ${{ steps.set_version.outputs.version }} \
+  #           helm/home-assistant
+
+  #     - name: Lint helm chart
+  #       run: |
+  #         set -e
+
+  #         wget https://github.com/stackrox/kube-linter/releases/download/v0.6.4/kube-linter-linux -O /usr/local/bin/kube-linter
+  #         chmod +x /usr/local/bin/kube-linter
+
+  #         cat <<EOF > .kube-linter.yaml
+  #         checks:
+  #           exclude:
+  #             - unset-cpu-requirements
+  #             - no-read-only-root-fs
+  #         EOF
+
+  #         kube-linter lint <(helm template helm/home-assistant)
+
+  #     - name: Push helm chart
+  #       run: |
+  #         set -e
+  #         chartName=$(basename helm/home-assistant)
+  #         helm push $chartName-${{ steps.set_version.outputs.version }}.tgz oci://repo.helm.com/helm
