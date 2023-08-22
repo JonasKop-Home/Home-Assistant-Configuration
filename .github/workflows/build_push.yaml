@@ -43,13 +43,6 @@ jobs:
           cp configuration.yaml \
             helm/home-assistant/configuration
 
-      - name: Build Container image
-        uses: jonaskop-home/github-actions/build-container-image@main
-        with:
-          image: home-assistant
-          tag: ${{ needs.version.outputs.version }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Package Helm chart
         uses: jonaskop-home/github-actions/package-helm-chart@main
         with:

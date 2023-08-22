@@ -1,7 +1,7 @@
 image:
-  registry: ghcr.io
-  repository: jonaskop-home/home-assistant
-  tag: ""
+  registry: docker.io
+  repository: homeassistant/home-assistant
+  tag: "2023.8.2"
 
 ingress:
   hostname: home-assistant.example.com

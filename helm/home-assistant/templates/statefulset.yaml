@@ -13,11 +13,65 @@ spec:
       labels:
         {{- include "home-assistant.selectorLabels" . | nindent 8 }}
     spec:
+      initContainers:
+        - name: create-users
+          image: {{ include "home-assistant.image" . }}
+          command:
+          - sh
+          - -c
+          - |
+            set -eu
+            addgroup "$NAME" -g "$ID"
+            adduser "$NAME" -u "$ID" -G "$NAME" -D -H
+            cp -rf /etc/passwd /etc/group $DIRECTORIES /init-tmp/
+            chown -R "$NAME:$NAME" /init-tmp
+          env:
+            - name: NAME
+              value: home-assistant
+            - name: ID
+              value: "1000"
+            - name: DIRECTORIES
+              value: /config
+          volumeMounts:
+            - name: init-tmp
+              mountPath: /init-tmp
       containers:
         - name: home-assistant
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
           image: {{ include "home-assistant.image" . }}
           ports:
             - name: http
               containerPort: 8123
               protocol: TCP
-              
+          volumeMounts:
+            - name: init-tmp
+              mountPath: /etc/passwd
+              subPath: passwd
+            - name: init-tmp
+              mountPath: /etc/group
+              subPath: group
+            - name: init-tmp
+              mountPath: /config
+              subPath: config
+            - name: secrets
+              mountPath: /config/secrets.yaml
+              subPath: secrets.yaml
+            - name: secrets
+              mountPath: /config/serviceAccount.json
+              subPath: serviceAccount.json
+            {{- range $path, $_ := .Files.Glob "configuration/*" }}
+            - name: configs
+              mountPath: /config/{{ $path | base }}
+              subPath: {{ $path | base }}
+            {{- end }}
+      volumes:
+        - name: init-tmp
+          emptyDir: {}
+        - name: secrets
+          secret:
+            secretName: {{ .Chart.Name }}
+        - name: configs
+          configMap:
+            name: {{ .Chart.Name }}
