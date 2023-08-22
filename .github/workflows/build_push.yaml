@@ -18,20 +18,24 @@ jobs:
 
       - name: Set version
         id: set_version
-        uses: JonasKop-Home/Github-Actions/set-version@main
+        uses: jonasKop-home/github-actions/set-version@main
 
   package_helm:
     runs-on: ubuntu-22.04
     name: Package helm chart
+    permissions:
+      packages: write
     needs: version
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
 
+      - run: echo version ${{ needs.version.outputs.version }}
+
       - name: Login to Google Cloud
         uses: "google-github-actions/auth@v1"
         with:
-          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Copy configuration files
         run: |
@@ -39,10 +43,17 @@ jobs:
           cp configuration.yaml \
             helm/home-assistant/configuration
 
+      - name: Build Container image
+        uses: jonaskop-home/github-actions/build-container-image@main
+        with:
+          image: home-assistant
+          tag: ${{ needs.version.outputs.version }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Package Helm chart
-        uses: JonasKop-Home/Github-Actions/package-helm-chart@main
+        uses: jonaskop-home/github-actions/package-helm-chart@main
         with:
           chart: helm/home-assistant
-          version: ${{ steps.version.outputs.version }}
+          version: ${{ needs.version.outputs.version }}
           repository: ${{ vars.OCI_REPOSITORY }}
           gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}

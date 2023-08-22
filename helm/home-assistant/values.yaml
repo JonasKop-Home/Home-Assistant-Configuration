@@ -1,12 +1,11 @@
 image:
-  registry: docker.io
-  repository: homeassistant/home-assistant
-  tag: "2023.8.2"
+  registry: ghcr.io
+  repository: jonaskop-home/home-assistant
+  tag: ""
 
 ingress:
   hostname: home-assistant.example.com
   annotations: {}
-
 
 config:
   trustedIps: 10.43.0.0/16

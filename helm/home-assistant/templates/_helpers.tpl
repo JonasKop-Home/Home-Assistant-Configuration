@@ -31,6 +31,6 @@ Container image
 {{- define "home-assistant.image" -}}
 {{- $registryName := .Values.image.registry -}}
 {{- $repositoryName := .Values.image.repository -}}
-{{- $tag := .Values.image.tag -}}
+{{- $tag := .Values.image.tag | deafult .Chart.Version -}}
 {{- printf "%s%s%s%s%s" $registryName "/" $repositoryName ":" $tag -}}
 {{- end }}
