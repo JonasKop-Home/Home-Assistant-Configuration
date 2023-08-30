@@ -82,6 +82,10 @@ spec:
               mountPath: /config/{{ $path | base }}
               subPath: {{ $path | base }}
             {{- end }}
+            - mountPath: /config/.storage
+              name: storage
+              readOnly: false
+
       volumes:
         - name: init-tmp
           emptyDir: {}
@@ -91,3 +95,6 @@ spec:
         - name: configs
           configMap:
             name: {{ .Chart.Name }}
+        - name: storage
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-storage

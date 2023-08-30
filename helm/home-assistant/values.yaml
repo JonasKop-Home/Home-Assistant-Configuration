@@ -8,7 +8,7 @@ ingress:
   annotations: {}
 
 config:
-  trustedIps: 10.43.0.0/16
+  trustedIps: 10.42.0.0/16
   postgresql:
     hostname: "not_set"
     username: "not_set"
