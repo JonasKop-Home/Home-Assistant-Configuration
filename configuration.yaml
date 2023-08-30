@@ -9,11 +9,12 @@ tts:
 recorder:
   db_url: !secret db_url
 
-# Ingress forwarding ettings
+# Ingress forwarding settings
 http:
   use_x_forwarded_for: true
   trusted_proxies:
-    - !secret trusted_ips
+    - 192.168.1.1/24
+    - 10.42.0.0/16
 
 # Google assistant configuration
 google_assistant:
