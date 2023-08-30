@@ -45,12 +45,12 @@ spec:
                 secretKeyRef:
                   name: home-assistant.home-assistant-postgresql.credentials.postgresql.acid.zalan.do
                   key: username
-            - name: secrets
-              mountPath: /config/secrets.yaml
-              subPath: secrets.yaml
           volumeMounts:
             - name: init-tmp
               mountPath: /init-tmp
+            - name: secrets
+              mountPath: /config/secrets.yaml
+              subPath: secrets.yaml
       containers:
         - name: home-assistant
           securityContext:
