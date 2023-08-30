@@ -25,6 +25,9 @@ spec:
             adduser "$NAME" -u "$ID" -G "$NAME" -D -H
             cp -rf /etc/passwd /etc/group $DIRECTORIES /init-tmp/
             chown -R "$NAME:$NAME" /init-tmp
+
+            apk add envsubst
+            envsubst < /config/secrets.yaml > /init-tmp/secrets.yaml
           env:
             - name: NAME
               value: home-assistant
@@ -32,6 +35,19 @@ spec:
               value: "1000"
             - name: DIRECTORIES
               value: /config
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: home-assistant.home-assistant-postgresql.credentials.postgresql.acid.zalan.do
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: home-assistant.home-assistant-postgresql.credentials.postgresql.acid.zalan.do
+                  key: username
+            - name: secrets
+              mountPath: /config/secrets.yaml
+              subPath: secrets.yaml
           volumeMounts:
             - name: init-tmp
               mountPath: /init-tmp
@@ -55,7 +71,7 @@ spec:
             - name: init-tmp
               mountPath: /config
               subPath: config
-            - name: secrets
+            - name: init-tmp
               mountPath: /config/secrets.yaml
               subPath: secrets.yaml
             - name: secrets
