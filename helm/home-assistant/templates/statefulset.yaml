@@ -85,7 +85,6 @@ spec:
             - mountPath: /config/.storage
               name: storage
               readOnly: false
-
       volumes:
         - name: init-tmp
           emptyDir: {}
@@ -98,3 +97,5 @@ spec:
         - name: storage
           persistentVolumeClaim:
             claimName: {{ .Chart.Name }}-storage
+      securityContext:
+        fsGroup: 1000
