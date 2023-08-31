@@ -13,10 +13,6 @@ config:
     username: "not_set"
     password: "not_set"
     database: "home-assistant"
-  mosquitto:
-    hostname: "not_set"
-    username: "not_set"
-    password: "not_set"
   google:
     projectId: "not_set"
     serviceAccount: "not_set"

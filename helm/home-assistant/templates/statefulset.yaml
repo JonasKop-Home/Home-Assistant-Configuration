@@ -25,18 +25,18 @@ spec:
             set -eu
             addgroup "$NAME" -g "$ID"
             adduser "$NAME" -u "$ID" -G "$NAME" -D -H
-            cp -rf /etc/passwd /etc/group $DIRECTORIES /init-tmp/
+            cp -rf /etc/passwd /etc/group /init-tmp/
             chown -R "$NAME:$NAME" /init-tmp
 
+            wget -O - https://get.hacs.xyz | bash -
+
             apk add envsubst
-            envsubst < /config/secrets.yaml > /init-tmp/secrets.yaml
+            envsubst < /tmp/secrets.yaml > /config/secrets.yaml
           env:
             - name: NAME
               value: home-assistant
             - name: ID
               value: "1000"
-            - name: DIRECTORIES
-              value: /config
             - name: POSTGRES_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -51,8 +51,10 @@ spec:
             - name: init-tmp
               mountPath: /init-tmp
             - name: secrets
-              mountPath: /config/secrets.yaml
+              mountPath: /tmp/secrets.yaml
               subPath: secrets.yaml
+            - name: appconfig
+              mountPath: /config
       containers:
         - name: home-assistant
           securityContext:
@@ -70,12 +72,6 @@ spec:
             - name: init-tmp
               mountPath: /etc/group
               subPath: group
-            - name: init-tmp
-              mountPath: /config
-              subPath: config
-            - name: init-tmp
-              mountPath: /config/secrets.yaml
-              subPath: secrets.yaml
             - name: secrets
               mountPath: /config/serviceAccount.json
               subPath: serviceAccount.json
@@ -84,9 +80,8 @@ spec:
               mountPath: /config/{{ $path | base }}
               subPath: {{ $path | base }}
             {{- end }}
-            - mountPath: /config/.storage
-              name: storage
-              readOnly: false
+            - name: appconfig
+              mountPath: /config
       volumes:
         - name: init-tmp
           emptyDir: {}
@@ -96,8 +91,8 @@ spec:
         - name: configs
           configMap:
             name: {{ .Chart.Name }}
-        - name: storage
+        - name: appconfig
           persistentVolumeClaim:
-            claimName: {{ .Chart.Name }}-storage
+            claimName: {{ .Chart.Name }}
       securityContext:
         fsGroup: 1000

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Chart.Name }}-storage
+  name: {{ .Chart.Name }}
   labels:
     {{- include "home-assistant.labels" . | nindent 4 }}
 spec:
