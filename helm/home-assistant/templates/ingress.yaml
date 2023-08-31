@@ -24,3 +24,7 @@ spec:
                 name: {{ .Chart.Name }}
                 port:
                   number: 80
+  tls:
+    - hosts:
+        - {{ .Values.ingress.hostname }}
+      secretName: {{ .Chart.Name }}-tls
