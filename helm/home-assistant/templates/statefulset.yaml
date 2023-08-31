@@ -28,8 +28,6 @@ spec:
             cp -rf /etc/passwd /etc/group /init-tmp/
             chown -R "$NAME:$NAME" /init-tmp
 
-            wget -O - https://get.hacs.xyz | bash -
-
             apk add envsubst
             envsubst < /tmp/secrets.yaml > /config/secrets.yaml
           env:
