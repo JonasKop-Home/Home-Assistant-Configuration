@@ -26,7 +26,7 @@ spec:
 
             mkdir -p /config/integrations
             git clone https://github.com/sfalkman/ngenic-hass-platform.git /config/integrations/ngenic-hass-platform
-            ln -s /config/integrations/ngenic-hass-platform/custom_components/ngenic /config/custom_components/ngenic
+            ln -sf /config/integrations/ngenic-hass-platform/custom_components/ngenic /config/custom_components/ngenic
 
             addgroup "$NAME" -g "$ID"
             adduser "$NAME" -u "$ID" -G "$NAME" -D -H
