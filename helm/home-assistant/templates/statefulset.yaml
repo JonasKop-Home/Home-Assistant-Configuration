@@ -24,6 +24,8 @@ spec:
           - |
             set -eu
 
+            git config --global safe.directory '*'
+
             mkdir -p /config/integrations
             git -C /config/integrations/ngenic-hass-platform pull || git clone https://github.com/sfalkman/ngenic-hass-platform.git /config/integrations/ngenic-hass-platform
             ln -sf /config/integrations/ngenic-hass-platform/custom_components/ngenic /config/custom_components/ngenic
@@ -31,7 +33,7 @@ spec:
             addgroup "$NAME" -g "$ID"
             adduser "$NAME" -u "$ID" -G "$NAME" -D -H
             cp -rf /etc/passwd /etc/group /init-tmp/
-            chown -R "$NAME:$NAME" /config /init-tmp ||:
+            chown -R "$NAME:$NAME" /config /init-tmp
 
             apk add envsubst
             envsubst < /tmp/secrets.yaml > /config/secrets.yaml
