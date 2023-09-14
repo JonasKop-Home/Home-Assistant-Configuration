@@ -22,4 +22,12 @@ google_assistant:
   service_account: !include serviceAccount.json
   report_state: true
   expose_by_default: false
-  entity_config: {}
+  entity_config:
+    light.allrumslampan:
+      expose: true
+    light.hallampan:
+      expose: true
+    light.vardagsrumslampa_1:
+      expose: true
+    light.vardagsrumslampa_2:
+      expose: true
