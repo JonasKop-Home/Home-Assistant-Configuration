@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Chart.Name }}
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     {{- include "home-assistant.labels" . | nindent 4 }}
 spec:

@@ -31,3 +31,5 @@ google_assistant:
       expose: true
     light.vardagsrumslampa_2:
       expose: true
+    light.fonsterlamporna:
+      expose: true
