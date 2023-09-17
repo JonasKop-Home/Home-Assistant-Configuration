@@ -33,3 +33,7 @@ google_assistant:
       expose: true
     light.fonsterlamporna:
       expose: true
+    vacuum.bobby:
+      expose: true
+      aliases:
+        - dammsugaren
